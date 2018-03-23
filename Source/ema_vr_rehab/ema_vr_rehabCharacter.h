@@ -2,9 +2,42 @@
 
 #pragma once
 
+#include "ROSIntegration/Public/std_msgs/String.h"
+#include "ROSIntegration/Classes/RI/Topic.h"
+#include "ROSIntegration/Classes/ROSIntegrationGameInstance.h"
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "ema_vr_rehabCharacter.generated.h"
+
+USTRUCT(BlueprintType)
+struct FBoneOrientationStruct
+{
+	GENERATED_BODY()
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	FQuat BoneQuaternion;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	FVector BoneOrientation;
+
+	FBoneOrientationStruct()
+	{
+		BoneOrientation = FVector(0, 0, 0);
+		BoneQuaternion = FQuat::MakeFromEuler(FVector(0, 0, 0));
+	}
+
+	FBoneOrientationStruct(FQuat ABoneQuaternion)
+	{
+		BoneQuaternion = ABoneQuaternion;
+		BoneOrientation = ABoneQuaternion.Euler();
+	}
+
+	FBoneOrientationStruct(FVector ABoneOrientation)
+	{
+		BoneOrientation = ABoneOrientation;
+		BoneQuaternion = FQuat::MakeFromEuler(ABoneOrientation);
+	}
+};
 
 UCLASS(config=Game)
 class Aema_vr_rehabCharacter : public ACharacter
@@ -28,6 +61,16 @@ public:
 	/** Base look up/down rate, in deg/sec. Other scaling may affect final rate. */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera)
 	float BaseLookUpRate;
+
+	UFUNCTION(BlueprintCallable)
+	void SubscribeOnTopic(FString ATopic);
+
+	UFUNCTION(BlueprintCallable)
+	void PublishOnTopic(FString ATopic);
+
+	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	TMap<FString, FBoneOrientationStruct> OrientationMap;
 
 protected:
 
