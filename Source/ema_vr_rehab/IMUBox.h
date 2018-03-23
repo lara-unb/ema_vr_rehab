@@ -2,6 +2,9 @@
 
 #pragma once
 
+#include "ROSIntegration/Public/std_msgs/String.h"
+#include "ROSIntegration/Classes/RI/Topic.h"
+#include "ROSIntegration/Classes/ROSIntegrationGameInstance.h"
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "IMUBox.generated.h"
@@ -23,6 +26,13 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	
+	UFUNCTION(BlueprintCallable)
+	void SubscribeOnTopic(FString ATopic);
+
+	UFUNCTION(BlueprintCallable)
+	void PublishOnTopic(FString ATopic);
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	FVector OrientationMap;
 	
 };
