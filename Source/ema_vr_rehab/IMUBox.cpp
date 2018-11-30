@@ -25,7 +25,7 @@ void AIMUBox::SubscribeOnTopic(FString ATopic)
 		auto Concrete = StaticCastSharedPtr<ROSMessages::std_msgs::String>(msg);
 		if (Concrete.IsValid())
 		{
-			UE_LOG(LogTemp, Warning, TEXT("Incoming string was: %s"), (*(Concrete->_Data)));
+			//UE_LOG(LogTemp, Warning, TEXT("Incoming string was: %s"), (*(Concrete->_Data)));
 
 
 			TArray<FString> Tokens;
@@ -38,7 +38,7 @@ void AIMUBox::SubscribeOnTopic(FString ATopic)
 					FCString::Atof(*(Tokens[2])),
 					FCString::Atof(*(Tokens[3])),
 					FCString::Atof(*(Tokens[4])))).Euler();
-				UE_LOG(LogTemp, Warning, TEXT("Object orientation: %f %f %f"), (OrientationMap.X), (OrientationMap.Y), (OrientationMap.Z));
+				//UE_LOG(LogTemp, Warning, TEXT("Object orientation: %f %f %f"), (OrientationMap.X), (OrientationMap.Y), (OrientationMap.Z));
 			}
 		}
 		else

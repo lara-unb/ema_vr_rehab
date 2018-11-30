@@ -8,12 +8,16 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "PlatformFilemanager.h"
+#include "FileHelper.h"
 
 //////////////////////////////////////////////////////////////////////////
 // Aema_vr_rehabCharacter
 
 Aema_vr_rehabCharacter::Aema_vr_rehabCharacter()
 {
+	//timeSinceReset = UGameplayStatics::GetRealTimeSeconds(GetWorld());
+	
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
 
@@ -144,10 +148,11 @@ void Aema_vr_rehabCharacter::SubscribeOnTopic(FString ATopic)
 	// Create a std::function callback object
 	std::function<void(TSharedPtr<FROSBaseMsg>)> SubscribeCallback = [&](TSharedPtr<FROSBaseMsg> msg) -> void
 	{
+		//FString topicName;
 		auto Concrete = StaticCastSharedPtr<ROSMessages::std_msgs::String>(msg);
 		if (Concrete.IsValid())
 		{
-			UE_LOG(LogTemp, Warning, TEXT("Incoming string was: %s"), (*(Concrete->_Data)));
+			//UE_LOG(LogTemp, Warning, TEXT("Incoming string was: %s"), (*(Concrete->_Data)));
 
 
 			TArray<FString> Tokens;
@@ -171,13 +176,40 @@ void Aema_vr_rehabCharacter::SubscribeOnTopic(FString ATopic)
 						FCString::Atof(*(Tokens[4]))));
 				}
 
-				UE_LOG(LogTemp, Warning, TEXT("Object orientation %s: %f %f %f"), (*Tokens[0]), (OrientationMap[Tokens[0]].BoneOrientation.X), (OrientationMap[Tokens[0]].BoneOrientation.Y), (OrientationMap[Tokens[0]].BoneOrientation.Z));
+				//UE_LOG(LogTemp, Warning, TEXT("Object orientation %s: %f %f %f"), (*Tokens[0]), (OrientationMap[Tokens[0]].BoneOrientation.X), (OrientationMap[Tokens[0]].BoneOrientation.Y), (OrientationMap[Tokens[0]].BoneOrientation.Z));
+
 			}
+			
+			/*FString tempString = FString::SanitizeFloat(UGameplayStatics::GetRealTimeSeconds(GetWorld())) + " " +
+								 FString::SanitizeFloat(OrientationMap[Tokens[0]].BoneOrientation.X) + " " +
+								 FString::SanitizeFloat(OrientationMap[Tokens[0]].BoneOrientation.Y) + " " +
+								 FString::SanitizeFloat(OrientationMap[Tokens[0]].BoneOrientation.Z) + "\r\n";
+			UE_LOG(LogTemp, Warning, TEXT("%s"), (*tempString));
+			fileWriteString += tempString;
+			topicName = Tokens[0];*/
 		}
 		else
 		{
 			UE_LOG(LogTemp, Warning, TEXT("Could not get message content"));
 		}
+
+		/*if (UGameplayStatics::GetRealTimeSeconds(GetWorld()) - timeSinceReset >= 10.0f)
+		{
+			timeSinceReset = UGameplayStatics::GetRealTimeSeconds(GetWorld());
+			FString SaveDirectory = FString("C:/Users/Adm/Downloads");
+			FString FileName = topicName + FString(".txt");
+			IPlatformFile& PlatformFile = FPlatformFileManager::Get().GetPlatformFile();
+
+			if (PlatformFile.CreateDirectoryTree(*SaveDirectory))
+			{
+				FString AbsoluteFilePath = SaveDirectory + "/" + FileName;
+
+				FFileHelper::SaveStringToFile(fileWriteString, *AbsoluteFilePath, FFileHelper::EEncodingOptions::ForceAnsi, &IFileManager::Get(), EFileWrite::FILEWRITE_Append);
+				fileWriteString.Empty();
+				fileWriteString.Reset();
+			}
+		}*/
+
 		return;
 	};
 
@@ -185,7 +217,7 @@ void Aema_vr_rehabCharacter::SubscribeOnTopic(FString ATopic)
 	ExampleTopic->Subscribe(SubscribeCallback);
 }
 
-void Aema_vr_rehabCharacter::PublishOnTopic(FString ATopic)
+void Aema_vr_rehabCharacter::PublishOnTopic(FString ATopic, FString Content)
 {
 	UE_LOG(LogTemp, Warning, TEXT("Publishing on topic..."));
 	// Initialize a topic
@@ -198,7 +230,7 @@ void Aema_vr_rehabCharacter::PublishOnTopic(FString ATopic)
 	//ExamplePublishTopic->Advertise();
 
 	// Publish a string to the topic
-	TSharedPtr<ROSMessages::std_msgs::String> StringMessage(new ROSMessages::std_msgs::String("This is an example"));
+	TSharedPtr<ROSMessages::std_msgs::String> StringMessage(new ROSMessages::std_msgs::String(Content));
 	ExampleTopic->Publish(StringMessage);
 	UE_LOG(LogTemp, Warning, TEXT("Published on topic"));
 }

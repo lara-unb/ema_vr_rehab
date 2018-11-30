@@ -6,6 +6,7 @@
 #include "ROSIntegration/Classes/RI/Topic.h"
 #include "ROSIntegration/Classes/ROSIntegrationGameInstance.h"
 #include "CoreMinimal.h"
+#include "Kismet/GameplayStatics.h"
 #include "GameFramework/Character.h"
 #include "ema_vr_rehabCharacter.generated.h"
 
@@ -43,7 +44,6 @@ UCLASS(config=Game)
 class Aema_vr_rehabCharacter : public ACharacter
 {
 	GENERATED_BODY()
-
 	/** Camera boom positioning the camera behind the character */
 	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	//class USpringArmComponent* CameraBoom;
@@ -66,11 +66,15 @@ public:
 	void SubscribeOnTopic(FString ATopic);
 
 	UFUNCTION(BlueprintCallable)
-	void PublishOnTopic(FString ATopic);
+	void PublishOnTopic(FString ATopic, FString Content);
 
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	TMap<FString, FBoneOrientationStruct> OrientationMap;
+
+	/*float timeSinceReset;
+
+	FString fileWriteString;*/
 
 protected:
 
