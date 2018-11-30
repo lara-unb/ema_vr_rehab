@@ -148,13 +148,11 @@ void Aema_vr_rehabCharacter::SubscribeOnTopic(FString ATopic)
 	// Create a std::function callback object
 	std::function<void(TSharedPtr<FROSBaseMsg>)> SubscribeCallback = [&](TSharedPtr<FROSBaseMsg> msg) -> void
 	{
-		//FString topicName;
 		auto Concrete = StaticCastSharedPtr<ROSMessages::std_msgs::String>(msg);
 		if (Concrete.IsValid())
 		{
 			//UE_LOG(LogTemp, Warning, TEXT("Incoming string was: %s"), (*(Concrete->_Data)));
-
-
+			
 			TArray<FString> Tokens;
 			FString MyString(*(Concrete->_Data));
 			const TCHAR* Delims[] = { TEXT(" ") };
@@ -163,6 +161,7 @@ void Aema_vr_rehabCharacter::SubscribeOnTopic(FString ATopic)
 			{
 				if (OrientationMap.Find(Tokens[0]) == NULL)
 				{
+					TopicString.Emplace(Tokens[0], MyString);
 					OrientationMap.Emplace(Tokens[0], FBoneOrientationStruct(FQuat(FCString::Atof(*(Tokens[1])),
 						FCString::Atof(*(Tokens[2])),
 						FCString::Atof(*(Tokens[3])),
@@ -170,6 +169,7 @@ void Aema_vr_rehabCharacter::SubscribeOnTopic(FString ATopic)
 				}
 				else
 				{
+					TopicString[Tokens[0]] = MyString;
 					OrientationMap[Tokens[0]] = FBoneOrientationStruct(FQuat(FCString::Atof(*(Tokens[1])),
 						FCString::Atof(*(Tokens[2])),
 						FCString::Atof(*(Tokens[3])),

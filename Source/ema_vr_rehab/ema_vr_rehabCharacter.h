@@ -72,6 +72,9 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	TMap<FString, FBoneOrientationStruct> OrientationMap;
 
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	TMap<FString, FString> TopicString;
+
 	/*float timeSinceReset;
 
 	FString fileWriteString;*/
