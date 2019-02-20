@@ -6,6 +6,10 @@
 
 #include <iomanip>
 
+#define SetPort SetPort
+#define SetPortW SetPort
+#define SetPortA SetPort
+
 // void messageCallback(const json &message){
 //       std::string pkg_op = message["op"];
 //       std::cout << "Type of received message: " << pkg_op;

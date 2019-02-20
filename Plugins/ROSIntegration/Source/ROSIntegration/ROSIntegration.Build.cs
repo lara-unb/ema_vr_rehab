@@ -30,12 +30,12 @@ public class ROSIntegration : ModuleRules
         Console.WriteLine("BSONPath: " + BSONPath);
 
         // Include std::string functions for rapidjson
-        Definitions.Add("RAPIDJSON_HAS_STDSTRING=1");
+        PublicDefinitions.Add("RAPIDJSON_HAS_STDSTRING=1");
 
 
         PublicIncludePaths.AddRange(
 			new string[] {
-				"ROSIntegration/Public"
+                "D:/Unreal Projects/ema_vr_rehab/Plugins/ROSIntegration/Source/ROSIntegration/Public"
 				// ... add public include paths required here ...
 			}
 			);
@@ -43,8 +43,8 @@ public class ROSIntegration : ModuleRules
 		
 		PrivateIncludePaths.AddRange(
 			new string[] {
-				"ROSIntegration/Private",
-                "ROSIntegration/Private/rosbridge2cpp"
+                "D:/Unreal Projects/ema_vr_rehab/Plugins/ROSIntegration/Source/ROSIntegration/Private",
+                "D:/Unreal Projects/ema_vr_rehab/Plugins/ROSIntegration/Source/ROSIntegration/Private/rosbridge2cpp"
 				// ... add other private include paths required here ...
 			}
 			);

@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-#include "messages/rosbridge_msg.h"
+#include <messages/rosbridge_msg.h>
 
 class ROSBridgePublishMsg : public ROSBridgeMsg{
 public:
