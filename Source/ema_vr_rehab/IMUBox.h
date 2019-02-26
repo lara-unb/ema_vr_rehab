@@ -34,5 +34,11 @@ public:
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	FVector OrientationMap;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	FQuat OrientationQuat;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	AActor* TCPReference;
 	
 };

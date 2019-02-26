@@ -35,5 +35,8 @@ class EMA_VR_REHAB_API UBlueprintQuaternionLibrary : public UBlueprintFunctionLi
 
 	UFUNCTION(BlueprintCallable)
 	static FVector Euler(FQuat Quat1);
+
+	UFUNCTION(BlueprintCallable)
+	static FQuat MakeFromEuler(FVector Vect1);
 	
 };

@@ -43,3 +43,9 @@ FVector UBlueprintQuaternionLibrary::Euler(FQuat Quat1)
 	FVector EulerOut = Quat1.Euler();
 	return EulerOut;
 }
+
+FQuat UBlueprintQuaternionLibrary::MakeFromEuler(FVector Vect1)
+{
+	FQuat QuatOut = FQuat::MakeFromEuler(Vect1);
+	return QuatOut;
+}
