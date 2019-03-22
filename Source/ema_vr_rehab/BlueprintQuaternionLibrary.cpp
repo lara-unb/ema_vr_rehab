@@ -52,14 +52,30 @@ FVector UBlueprintQuaternionLibrary::Euler(FQuat Quat1)
     t4 = +1.0 - 2.0 * (y * y + z * z)
     yaw = math.atan2(t3, t4)
     return [roll, pitch, yaw]*/
-	float t[5];
-	t[0] = 2.0 * (Quat1.W * Quat1.X + Quat1.Y * Quat1.Z);
-	t[1] = 1.0 - 2.0 * (Quat1.X * Quat1.X + Quat1.Y * Quat1.Y);
-	t[2] = 2.0 * (Quat1.W * Quat1.Y - Quat1.Z * Quat1.X);
-	t[2] = fabsf(t[2]) > 1.0 ? powf(-1.0, signbit(t[2]))/*t[2]/fabsf(t[2])*/ : t[2];
-	t[3] = 2.0 * (Quat1.W * Quat1.Z + Quat1.X * Quat1.Y);
-	t[4] = 1.0 - 2.0 * (Quat1.Y * Quat1.Y + Quat1.Z * Quat1.Z);
-	FVector EulerOut = FVector(atan2f(t[0], t[1]), asinf(t[2]), atan2f(t[3], t[4])) * 180.0 / PI;
+	float t[5], roll, pitch, yaw, test, test_signal;
+	test = Quat1.X * Quat1.Y + Quat1.Z * Quat1.W;
+
+	if (fabsf(test) == 0.985 /*sin(85 degrees)*/) // Singularity test
+	{
+		test_signal = powf(-1.0, signbit(test)); /*test/fabsf(test)*/
+		roll = test_signal * 2.0 * atan2f(Quat1.X, Quat1.Y);
+		pitch = test_signal * PI / 2;
+		yaw = 0;
+	}
+	else
+	{
+		t[0] = 2.0 * (Quat1.W * Quat1.X + Quat1.Y * Quat1.Z);
+		t[1] = 1.0 - 2.0 * (Quat1.X * Quat1.X + Quat1.Y * Quat1.Y);
+		t[2] = 2.0 * (Quat1.W * Quat1.Y - Quat1.Z * Quat1.X);
+		t[2] = fabsf(t[2]) >= 1 ? powf(-1.0, signbit(t[2])) /*t[2]/fabsf(t[2])*/ : t[2];
+		t[3] = 2.0 * (Quat1.W * Quat1.Z + Quat1.X * Quat1.Y);
+		t[4] = 1.0 - 2.0 * (Quat1.Y * Quat1.Y + Quat1.Z * Quat1.Z);
+
+		roll = atan2f(t[0], t[1]);
+		pitch = asinf(t[2]);
+		yaw = atan2f(t[3], t[4]);
+	}
+	FVector EulerOut = FVector(roll, pitch, yaw) * 180.0 / PI;
 	//FVector EulerOut = Quat1.Euler();
 	return EulerOut;
 }
